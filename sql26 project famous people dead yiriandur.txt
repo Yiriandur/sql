@@ -1,0 +1,82 @@
+/* PROJECT: FAMOUS PEOPLE by YIRIANDUR
+Project data set and queries below */
+
+/* In this project, you’re going to make your own table with some small set of “famous people”, then make more tables about things they do and join those to create nice human readable lists.
+
+For example, here are types of famous people and the questions your data could answer:
+
+Movie stars: What movies are they in? Are they married to each other?
+Singers: What songs did they write? Where are they from?
+Authors: What books did they write?
+Fictional characters: How are they related to other characters? What books do they show up in?*/
+
+CREATE TABLE famous_dead (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    birth_year INTEGER,
+    death_year INTEGER);
+    
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("Leonard Nimoy", 1931, 2015);
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("Alan Rickman", 1946, 2016);
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("David Bowie", 1947, 2016);
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("Terry Pratchett", 1948, 2015);
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("Prince Roger Nelson", 1958, 2016);
+INSERT INTO famous_dead (fullname, birth_year, death_year) VALUES ("Harper Lee", 1926, 2016);
+
+CREATE TABLE branch (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    branch_name TEXT,
+    branch_job TEXT,
+    branch_product TEXT);
+
+INSERT INTO branch (branch_name, branch_job, branch_product) VALUES ("acting", "actor", "movie");
+INSERT INTO branch (branch_name, branch_job, branch_product) VALUES ("acting", "actor", "series");
+INSERT INTO branch (branch_name, branch_job, branch_product) VALUES ("writing", "writer", "book");
+INSERT INTO branch (branch_name, branch_job, branch_product) VALUES ("creating music", "musician", "song");
+
+CREATE TABLE lineofwork (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dead_id INTEGER,
+    branch_id INTEGER);
+
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (1, 1);
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (2, 2);
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (3, 4);
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (4, 3);
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (5, 4);
+INSERT INTO lineofwork (dead_id, branch_id) VALUES (6, 3);
+
+CREATE TABLE mostfamousfor (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, dead_id INTEGER, branch_id INTEGER,
+    work_title TEXT, work_year INTEGER);
+
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (1, 2, "Star Trek: The Original Series", 1966);
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (2, 1, "Robin Hood: Prince of Thieves", 1991);
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (3, 4, "Space Oddity", 1969);
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (4, 3, "The Discworld series", 1983);
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (5, 4, "Purple Rain", 1984);
+INSERT INTO mostfamousfor (dead_id, branch_id, work_title, work_year) VALUES (6, 3, "To Kill a Mockingbird", 1960);
+
+/* BASE SELECTS FROM TABLES */
+SELECT * FROM famous_dead ORDER BY death_year DESC;
+SELECT * FROM branch;
+SELECT * FROM lineofwork;
+SELECT * FROM mostfamousfor ORDER BY work_year DESC;
+
+/* NICE HUMAN READABLE TABLES */
+SELECT * FROM famous_dead ORDER BY birth_year;
+
+select famous_dead.fullname, branch.branch_job, mostfamousfor.work_title AS most_famous_work FROM famous_dead
+    LEFT OUTER JOIN lineofwork
+    ON famous_dead.id = lineofwork.dead_id
+    LEFT OUTER JOIN branch
+    ON branch.id = lineofwork.branch_id
+    LEFT OUTER JOIN mostfamousfor
+    ON famous_dead.id = mostfamousfor.dead_id
+ORDER BY mostfamousfor.work_year;
+
+select mostfamousfor.work_title AS famous_work, mostfamousfor.work_year, branch.branch_product FROM mostfamousfor
+    LEFT OUTER JOIN branch
+    ON mostfamousfor.branch_id = branch.id
+ORDER BY work_year;
+

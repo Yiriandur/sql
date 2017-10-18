@@ -1,0 +1,50 @@
+/* PROJECT: APP IMPERSONATOR by YIRIANDUR
+
+Assignment: 
+
+Think about your favorite apps, and pick one that stores your data- like a game that stores scores, an app that lets you post updates, etc. Now in this project, you're going to imagine that the app stores your data in a SQL database (which is pretty likely!), and write SQL statements that might look like their own SQL.
+
+CREATE a table to store the data.
+INSERT a few example rows in the table.
+Use an UPDATE to emulate what happens when you edit data in the app.
+Use a DELETE to emulate what happens when you delete data in the app.
+
+Now, what does the app's SQL look like?*/
+
+/*CREATE a table to store the data.*/
+CREATE TABLE article_editor (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    article_title TEXT,
+    article_body TEXT,
+    author_name TEXT,
+    date TEXT);
+
+/*INSERT a few example rows in the table.*/
+INSERT INTO article_editor (article_title, article_body, author_name, date) 
+    VALUES ("Yes", "This is an article.", "Yiri", "25 October 2016");
+INSERT INTO article_editor (article_title, article_body, author_name, date) 
+    VALUES ("It's the end of the world", "Or is it?", "Yiri", "26 October 2016");
+INSERT INTO article_editor (article_title, article_body, author_name, date) 
+    VALUES ("What happened yesterday?", "Actually, not much.", "Yiri", "29 October 2016");
+
+SELECT * FROM article_editor;
+
+/* Queries go here below: */
+
+/*Use an UPDATE to emulate what happens when you edit data in the app.*/
+
+UPDATE article_editor SET author_name = "Yiriandur" WHERE author_name = "Yiri";
+
+SELECT * FROM article_editor;
+
+ALTER TABLE article_editor ADD article_location TEXT default "unknown";
+
+UPDATE article_editor SET article_location="Netherlands" where author_name = "Yiriandur";
+
+SELECT * FROM article_editor;
+
+/*Use a DELETE to emulate what happens when you delete data in the app.*/
+
+DELETE FROM article_editor WHERE article_title="Yes";
+
+SELECT * FROM article_editor;
